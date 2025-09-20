@@ -1,77 +1,102 @@
 # VAMOStrategy
 
-**VAMOStrategy** — an open-source Pine Script v6 trading *strategy* for TradingView, built for Bitcoin scalping.
+Welcome to **VAMOStrategy**, an open-source Pine Script v6 project for TradingView — perfect for Bitcoin scalping!  
+This repository includes both:
 
-The VAMO Crossover Strategy uses a Volatility-Adjusted Momentum Oscillator (VAMO) and an EMA signal line to generate buy/sell signals. It adds ATR-based stop loss / take profit and a volatility filter for cleaner, faster scalping decisions.
+- **VAMO Crossover Strategy** – a scalping strategy using momentum & volatility  
+- **VAMO Indicator** – a Volatility-Adjusted Momentum Oscillator (VAMO) to visualize signals  
 
----
-
-## Features
-
-- **VAMO indicator** — combines momentum (ROC) and volatility (ATR) for adaptive signals.  
-- **Crossover signals** — long/short entries triggered when VAMO crosses its EMA signal line.  
-- **Risk management** — ATR-based stop (default 1× ATR) and take-profit (default 2× ATR).  
-- **Volatility filter** — skips trades in high-volatility regimes to reduce false signals.  
-- **Customizable** — tweak periods, stop/take multipliers and filters to fit your style.
+With ATR-based risk management and a volatility filter, this project is built for **fast, precise trades**.  
+Join us to use, test, and improve VAMOStrategy!
 
 ---
 
-## Quick setup
+## ✨ Features
 
-1. Open **TradingView** and go to the **Pine Editor**.  
-2. Copy the code from `Strategy.pine` in this repository.  
-3. Paste it into the Pine Editor and click **Add to Chart**.  
-4. Apply to a Bitcoin chart (e.g. `BTC/USD` or `BTC/USDT`) on a **1–5 minute** timeframe.  
-5. Open the strategy settings and adjust inputs (Momentum Length, Volatility Length, Signal Length, Take Profit Multiplier, etc.).
-
-**Recommended starting inputs (example)**  
-- Momentum Length: `5`  
-- Volatility Length: `5`  
-- Signal (EMA) Length: `3`  
-- Stop Loss: `1 × ATR`  
-- Take Profit: `2 × ATR`
+- **VAMO Indicator** — Combines momentum (ROC) and volatility (ATR) for adaptive signals  
+- **Crossover Signals** — Long/short trades triggered when VAMO crosses its EMA signal line  
+- **Risk Management** — ATR-based stop-loss (1× ATR) and take-profit (2× ATR by default)  
+- **Volatility Filter** — Skips trades during extreme volatility to reduce false signals  
+- **Customizable** — Adjust momentum length, ATR period, and TP multiplier to fit your style  
 
 ---
 
-## Scalping tips
+## ⚙️ Setup
 
-- **Timeframe:** 1–5 minute charts are recommended for Bitcoin scalping.  
-- **Optimize inputs:** try faster settings for quicker signals (see recommended inputs above).  
-- **Backtest:** run thorough backtests on historical BTC data to refine parameters.  
-- **Leverage:** if you choose to use leverage, consider 5–20× and manage position size and risk carefully.  
-- **Paper trade first:** always test on a demo account before trading real funds.
+1. Open **TradingView** and navigate to **Pine Editor**  
+2. **For the Indicator**  
+   - Copy `Indicator.pine`  
+   - Click **Add to Chart** to visualize VAMO  
+3. **For the Strategy**  
+   - Copy `Strategy.pine`  
+   - Apply it to a Bitcoin chart (`BTC/USD` or `BTC/USDT`) on a **1–5 minute** timeframe  
+4. Adjust inputs (Momentum Length, Volatility Length, Take-Profit Multiplier, etc.) in the strategy settings  
 
 ---
 
-## Contributing
+## 📊 Backtesting Results  
+Recent backtest (Sept 15–20, 2025):  
 
-We welcome contributions! Ways to help:
+| **Metric**       | **Value**                 |
+|------------------|-------------------------|
+| **Net Profit**   | +$14,848.94 (**+1.48%**) |
+| **Max Drawdown** | $1,178.97 (**0.82%**)   |
+| **Total Trades** | 594                     |
+| **Winning Trades** | 39.90% (237/594)       |
+| **Profit Factor** | 1.146                  |
 
-- Propose new indicators, filters (e.g., volume-based), or exit rules.  
-- Optimize parameters for different assets or timeframes.  
-- Fix bugs or improve code readability and performance.  
-- **How to contribute:** fork the repo, make your changes, and submit a pull request. Use the Issues tab to discuss ideas.
+> **Note:** These results show strong potential, but always backtest with your own data, timeframe, and risk management.
+
+---
+
+## 💡 Scalping Tips
+
+- **Timeframe:** 1–5 minute Bitcoin charts work best  
+- **Optimize Inputs:** Try Momentum Length = `5`, Volatility Length = `5`, Signal Length = `3`  
+- **Backtest First:** Test on historical BTC data to refine parameters  
+- **Use Leverage Wisely:** 5–20× leverage can amplify profits *and* risks — manage carefully  
+
+---
+
+## 🤝 Contributing
+
+We’d love your help to make VAMOStrategy even better!  
+
+You can contribute by:  
+- **Adding Features** — new indicators, filters (volume-based, session filters), or exit logic  
+- **Optimizing** — tune parameters for other assets (e.g., ETH) or timeframes  
+- **Fixing Bugs** — spot and patch code issues or logic errors  
+
+**How to contribute:**  
+- Fork the repo  
+- Make your changes  
+- Submit a **pull request**  
+- Discuss ideas in the **Issues** tab  
 
 > Contributing Guide: *coming soon*
 
 ---
 
-## Repository structure
+## 📂 Repository Structure
 
-- `Strategy.pine` — VAMO Crossover Strategy (Pine Script v6).  
-- `LICENSE` — MIT License.  
-- `README.md` — this file.
-
----
-
-## License
-
-Licensed under the **MIT License**. See the `LICENSE` file for details.  
-© 2025 TPTBusiness
+- `Strategy.pine` — VAMO Crossover Strategy (Pine Script v6)  
+- `Indicator.pine` — VAMO Indicator (Pine Script v6)  
+- `LICENSE` — MIT License  
+- `README.md` — This file  
 
 ---
 
-## Disclaimer
+## 📜 License
 
-This strategy is provided **"as is"** without warranty. Trading carries high risk and past performance is not indicative of future results. Test thoroughly and understand the code before using real funds. This repository is educational — nothing here is financial advice.
+Licensed under the **MIT License**.  
+See the `LICENSE` file for details.  
+© 2025 **TPTBusiness**
+
+---
+
+## ⚠️ Disclaimer
+
+This project is provided **"as is"** with no warranty.  
+Trading carries high risk, and **past performance does not guarantee future results**.  
+Backtest thoroughly and understand the code before trading with real funds.
 
