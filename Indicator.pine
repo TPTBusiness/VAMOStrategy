@@ -1,0 +1,43 @@
+//@version=6
+// MIT License
+// Copyright (c) 2025 TPTBusiness
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+indicator(title="Volatility-Adjusted Momentum Oscillator (VAMO)", shorttitle="VAMO", overlay=false)
+
+// Inputs
+momLength = input.int(14, title="Momentum Length", minval=1)
+volLength = input.int(14, title="Volatility Length (ATR)", minval=1)
+signalLength = input.int(9, title="Signal Line Length (EMA)", minval=1)
+obLevel = input.float(70, title="Overbought Level", minval=0)
+osLevel = input.float(30, title="Oversold Level", minval=0)
+
+// Calculations
+momentum = ta.roc(close, momLength) // Standard rate of change (momentum)
+volatility = ta.atr(volLength) // Average True Range as volatility measure
+vamo = momentum / volatility * 100 // Adjust momentum by volatility and scale for readability
+signal = ta.ema(vamo, signalLength) // EMA signal line for crossovers
+
+// Plots
+plot(vamo, color=color.blue, title="VAMO Oscillator", linewidth=2)
+plot(signal, color=color.orange, title="Signal Line", linewidth=1)
+hline(obLevel, "Overbought", color=color.red, linestyle=hline.style_dashed)
+hline(osLevel, "Oversold", color=color.green, linestyle=hline.style_dashed)
+
+// Background colors for overbought/oversold
+bgcolor(vamo > obLevel ? color.new(color.red, 90) : na)
+bgcolor(vamo < osLevel ? color.new(color.green, 90) : na)
