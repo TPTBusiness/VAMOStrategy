@@ -1,0 +1,64 @@
+//@version=6
+// MIT License
+// Copyright (c) 2025 TPTBusiness
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+strategy(title = 'VAMO Crossover Strategy', shorttitle = 'VAMO Strat', overlay = true, pyramiding = 0, default_qty_type = strategy.percent_of_equity, default_qty_value = 100, currency = currency.USD)
+
+// Inputs for VAMO (matching the indicator)
+momLength = input.int(14, title = 'Momentum Length', minval = 1)
+volLength = input.int(14, title = 'Volatility Length (ATR)', minval = 1)
+signalLength = input.int(9, title = 'Signal Line Length (EMA)', minval = 1)
+obLevel = input.float(70, title = 'Overbought Level', minval = 0)
+osLevel = input.float(30, title = 'Oversold Level', minval = 0)
+
+// Strategy-specific inputs
+riskPerTrade = input.float(1.0, title = 'Risk per Trade (%)', minval = 0.1, maxval = 5.0)
+tpMultiplier = input.float(2.0, title = 'Take Profit Multiplier (x Risk)', minval = 1.0)
+volFilter = input.float(1.5, title = 'Volatility Filter Multiplier (avoid high vol)', minval = 1.0)
+
+// Recalculate VAMO in the strategy (to keep it self-contained, but you could use request.security() for external indicator)
+momentum = ta.roc(close, momLength)
+volatility = ta.atr(volLength)
+vamo = momentum / volatility * 100
+signal = ta.ema(vamo, signalLength)
+
+// Trade conditions
+longCondition = ta.crossover(vamo, signal) and vamo < obLevel and volatility < ta.atr(volLength * 2) * volFilter // Enter long: crossover up, not overbought, low vol
+shortCondition = ta.crossunder(vamo, signal) and vamo > osLevel and volatility < ta.atr(volLength * 2) * volFilter // Enter short: crossover down, not oversold, low vol
+
+// Risk management
+atrStop = ta.atr(volLength)
+stopLossDistance = atrStop // Stop-loss at 1x ATR
+takeProfitDistance = atrStop * tpMultiplier // TP at 2x ATR (or custom multiplier)
+
+// Entries
+if longCondition
+    strategy.entry('Long', strategy.long)
+    strategy.exit('Exit Long', 'Long', stop = close - stopLossDistance, limit = close + takeProfitDistance)
+
+if shortCondition
+    strategy.entry('Short', strategy.short)
+    strategy.exit('Exit Short', 'Short', stop = close + stopLossDistance, limit = close - takeProfitDistance)
+
+// Plot strategy elements on chart
+plotshape(series = longCondition, title = 'Long Entry', location = location.belowbar, color = color.green, style = shape.triangleup, size = size.small)
+plotshape(series = shortCondition, title = 'Short Entry', location = location.abovebar, color = color.red, style = shape.triangledown, size = size.small)
+
+// Additional plots for visualization (optional)
+plot(vamo, color = color.blue, title = 'VAMO', linewidth = 1, style = plot.style_linebr)
+plot(signal, color = color.orange, title = 'Signal', linewidth = 1, style = plot.style_linebr)
